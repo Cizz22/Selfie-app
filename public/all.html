@@ -1,0 +1,46 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img{
+            width : "107px";
+            height : "98px";
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">home</a>
+    
+<script>
+    let id;
+  getData();
+    async function getData(){
+        const response = await fetch('/api');
+        const data = await response.json();
+        console.log(data);
+        for(item of data){
+            const root = document.createElement('p');
+            const text = document.createElement('div');
+            const pos = document.createElement('div');
+            const button = document.createElement('button');
+            const date = document.createElement('div');
+            const image = new Image();
+
+            
+            text.textContent = `Your Text: ${item.text}`
+            pos.textContent =  `${item.lat}, ${item.lon}`
+            const dateString = new Date(item.timestamp).toLocaleString();
+            date.textContent = dateString;
+            image.src = item.image;
+            
+            
+            root.append(text,pos,date,image);
+            document.body.append(root);
+        }
+    }
+  
+</script>
+</body>
+</html>

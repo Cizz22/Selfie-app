@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js" integrity="sha512-WIklPM6qPCIp6d3fSSr90j+1unQHUOoWDS4sdTiR8gxUTnyZ8S2Mr8e10sKKJ/bhJgpAa/qG068RDkg6fIlNFA==" crossorigin="anonymous"></script>
+</head>
+<body>
+  <a href="all.html">all list</a>
+    <h1>Selfie App</h1>
+    <p>
+        latitude: <span id="lat"></span>&deg;<br>
+        longitude: <span id="lon"></span>&deg;
+    </p>
+        <input type="text" name="text" id="text">
+        <button id="submit">Submit</button>
+  
+    
+
+        <script>
+
+            function setup(){
+         noCanvas();
+      const video = createCapture(VIDEO);
+      video.size(320,240);
+
+                let lat, lon
+           const button = document.getElementById('submit');
+           button.addEventListener('click', async event => {
+            const text = document.getElementById('text').value;
+            video.loadPixels();
+            const image = video.canvas.toDataURL();
+            const data = { lat, lon, text ,image};
+            const options = {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            };
+            const response = await fetch('/api', options);
+            const json = await response.json();
+            console.log(json);
+      });
+           
+      if ('geolocation' in navigator) {
+        console.log('geolocation available');
+        navigator.geolocation.getCurrentPosition(async position => {
+          lat = position.coords.latitude;
+          lon = position.coords.longitude;
+          document.getElementById('lat').textContent = lat;
+          document.getElementById('lon').textContent = lon;
+        });
+      } else {
+        console.log('geolocation not available');
+      }
+
+     
+            }      
+         </script>
+</body>
+</html>
